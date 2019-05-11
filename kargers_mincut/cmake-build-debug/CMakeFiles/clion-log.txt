@@ -1,0 +1,4 @@
+/home/lmunier/Programs/clion-2018.3.4/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /media/lmunier/Data/EPFL/Master/2eme_annee/Semestre_2/Advanced_Algorithms/Homeworks/Homeworks_2/kargers_mincut
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /media/lmunier/Data/EPFL/Master/2eme_annee/Semestre_2/Advanced_Algorithms/Homeworks/Homeworks_2/kargers_mincut/cmake-build-debug
