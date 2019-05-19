@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/media/lmunier/Data/EPFL/Master/2eme_annee/Semestre_2/Advanced_Algorithms/Homeworks/Homeworks_2/untitled/main.cpp
+random
+-
+cstdlib
+-
+ctime
+-
+iostream
+-
+sstream
+-
+vector
+-
+algorithm
+-
+cmath
+-
+set
+-
+

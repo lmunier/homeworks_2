@@ -3,25 +3,42 @@
 #include <random>
 #include <array>
 #include <algorithm>
+#include <set>
 
-#define NB_ITERATION 100
+#define NB_ITERATION 200
 
 using namespace std;
 
 class Node {
 public:
-    explicit Node(){
+    explicit Node(int label){
         _parent = this;
         _rank = 0;
+        _label = label;
     }
 
     Node* _parent;
+    int _label;
     unsigned int _rank;
 };
 
-struct Graph {
+class Graph {
+public:
     int _nb_v, _nb_e;
-    vector<array<int, 2>> edges;
+    int mincut;
+
+    set< vector<bool> > hashes;
+    vector< array<int, 2> > edges;
+
+
+    // Creates a graph with V vertices and E edges
+    Graph(int V, int E)
+    {
+        this->_nb_v = V;
+        this->_nb_e = E;
+
+        this->mincut = INT16_MAX;
+    }
 };
 
 Node* my_find(Node* x) {
@@ -47,19 +64,11 @@ void my_union(Node* x, Node* y) {
     }
 }
 
-// Creates a graph with V vertices and E edges
-struct Graph* create_graph(int V, int E)
-{
-    Graph* graph = new Graph;
-
-    graph->_nb_v = V;
-    graph->_nb_e = E;
-    return graph;
-}
-
-int karger_mincut(struct Graph* graph){
-    int mincut = 0;
+int karger_mincut(Graph* graph){
+    int size_mincut = 0;
     int nb_vertex = graph->_nb_v, nb_edges = graph->_nb_e;
+
+    vector<bool> hash((unsigned long) nb_vertex);
     vector<array<int, 2>> edges = graph->edges;
 
     int p = 400;
@@ -70,7 +79,7 @@ int karger_mincut(struct Graph* graph){
     vector<Node*> list_nodes;
 
     for(int v = 0; v < nb_vertex; v++) {
-        list_nodes.push_back(new Node());
+        list_nodes.push_back(new Node(v));
     }
 
     while(nb_vertex > 2) {
@@ -85,16 +94,33 @@ int karger_mincut(struct Graph* graph){
         }
     }
 
-    mincut = 0;
+    // Find mincut
     for(int e = 0; e < nb_edges; e++) {
-        Node* v1 = my_find(list_nodes.at(static_cast<unsigned long>(edges[e][0])));
-        Node* v2 = my_find(list_nodes.at(static_cast<unsigned long>(edges[e][1])));
+        Node *v1 = my_find(list_nodes.at(static_cast<unsigned long>(edges[e][0])));
+        Node *v2 = my_find(list_nodes.at(static_cast<unsigned long>(edges[e][1])));
 
         if (v1 != v2)
-            mincut++;
+            size_mincut++;
     }
 
-    return mincut;
+    // Find nb of mincut
+    for(int v = 0; v < graph->_nb_v; v++) {
+        Node *v0 = my_find(list_nodes.at(0));
+        Node *v1 = my_find(list_nodes.at(static_cast<unsigned long>(v)));
+
+        hash[v] = v1 == v0;
+    }
+
+
+    if (size_mincut < graph->mincut) {
+        graph->mincut = size_mincut;
+        graph->hashes.clear();
+        graph->hashes.insert(hash);
+    } else if (size_mincut == graph->mincut){
+        graph->hashes.insert(hash);
+    }
+
+    return graph->mincut;
 };
 
 int main() {
@@ -103,7 +129,7 @@ int main() {
 
     // store number of vertices/edges and create graph
     cin >> n_vertices >> m_edges;
-    struct Graph* graph = create_graph(n_vertices, m_edges);
+    auto graph = new Graph(n_vertices, m_edges);
 
     for(int i = 0; i < m_edges; i++) {
         array<int, 2> edge{};
@@ -116,25 +142,16 @@ int main() {
     }
 
     // Karger's mincut part
-    for(int i = 0; i < NB_ITERATION; i++) {
-        int rest_mincut, nb_mincut = 0, tmp_nb_mincut = 0, mincut = 0, idx = 0;
-        results.push_back(karger_mincut(graph));
+    vector<array<int, 2>> rest_edge{};
 
-        rest_mincut = (int) results.size();
-        while(rest_mincut > 0) {
-            tmp_nb_mincut = (int) count(results.begin(), results.end(), idx);
+    for (int iter = 0; iter < 2; iter++){
+        rest_edge.clear();
 
-            if(tmp_nb_mincut > nb_mincut) {
-                nb_mincut = tmp_nb_mincut;
-                mincut = idx;
-            }
-
-            rest_mincut -= nb_mincut;
-            idx++;
-        }
-
-        cout << mincut << ' ' << 10 << endl;
+        for(int i = 0; i < NB_ITERATION; i++)
+            results.push_back(karger_mincut(graph));
     }
+
+    cout << graph->mincut << ' ' << graph->hashes.size() << endl;
 
     return 0;
 }
