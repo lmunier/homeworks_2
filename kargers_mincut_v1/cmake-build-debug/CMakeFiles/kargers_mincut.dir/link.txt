@@ -1,1 +1,0 @@
-/usr/bin/c++  -g   CMakeFiles/kargers_mincut.dir/main.cpp.o  -o kargers_mincut 

@@ -1,3 +1,0 @@
-/media/lmunier/Data/EPFL/Master/2eme_annee/Semestre_2/Advanced_Algorithms/Homeworks/Homeworks_2/kargers_mincut/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/media/lmunier/Data/EPFL/Master/2eme_annee/Semestre_2/Advanced_Algorithms/Homeworks/Homeworks_2/kargers_mincut/cmake-build-debug/CMakeFiles/kargers_mincut.dir
-/media/lmunier/Data/EPFL/Master/2eme_annee/Semestre_2/Advanced_Algorithms/Homeworks/Homeworks_2/kargers_mincut/cmake-build-debug/CMakeFiles/edit_cache.dir
